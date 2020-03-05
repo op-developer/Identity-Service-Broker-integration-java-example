@@ -11,25 +11,23 @@
   <body>
     <div class="container">
       <form class="example" action="initFlow">
-
-	    <h1>Demo Service Provider</h1>
-        <p>OP Identity Service Broker allows Service Providers (you) to implement strong electronic identification (Finnish bank credentials, Mobile ID) easily to websites and mobile apps via single API.</p>
-        <p>This Demo Service Provider gives you three different examples how to integrate to the Identification Service Broker:</p>
-        <ol>
-            <li>
-                OP’s hosted identification UI
-            </li>
-            <li>
-                <a href="embedded">Self-hosted UI (buttons) embedded into your service</a>
-            </li>
-        </ol>
-
-        <div class="row">
+  	  <h1>Demo Service Provider</h1>
+      <p>OP Identity Service Broker allows Service Providers (you) to implement strong electronic identification (Finnish bank credentials, Mobile ID) easily to websites and mobile apps via single API.</p>
+      <p>This Demo Service Provider gives you three different examples how to integrate to the Identification Service Broker:</p>
+      <ol>
+          <li>
+              <a href="/">OP’s hosted identification UI</a>
+          </li>
+          <li>
+              Self-hosted UI (buttons) embedded into your service
+          </li>
+      </ol>
+       <div class="row">
             <div class="info">
-                <p>You can place a button or link or some other call-to-action into your UI which redirects the end-user to OP’s hosted identification UI along with the Open ID Connect authentication request.</p>
+                <p>Alternatively you can embed the indentification UI into your service and render it as you like. The end-user is redirected straight from your UI to the selected Identity Provider (bank, Mobile ID) instead of OP&#x27;s hosted UI.</p>
                 <p>After identifying herself the end-user is redirected back to the return_uri you specify in the authentication request. The consent can be set in the request as well.</p>
-                <p><a href="https://github.com/op-developer/Identity-Service-Broker-API/blob/master/README.md" target="_blank">See the API docs for more information.</a></p>
-            </div>
+                <p><a href="https://github.com/op-developer/Identity-Service-Broker-API/blob/master/README.md" target="_blank">See the API docs for more information.</a></p> 
+           </div>
             <section class="params">
               <h3>Parameters for the identification request:</h3>
               <ul class="param-group">
@@ -60,16 +58,31 @@
               </ul>
             </section>
         </div>
- 
-        <h3 class="view-title">
-          Example UI
-            2: OP-hosted buttons
-        </h3>
 
+        <h3 class="view-title">
+            Example UI
+                1: Embedded buttons
+        </h3>
+ 
         <div class="view">
           <div class="view-layout">
             <div class="view-main">
-              <button type="submit" class="button" value="Submit">Identify yourself</button>
+			   <p>${isbConsent}</p>
+               <div class="alert -info">
+                    <h3 class="disturbanceTitle"> ${disturbanceInfo.header } </h3>
+                    <div class="disturbanceMessage"> ${disturbanceInfo.text } </div>
+                </div>
+              <div class="idp-buttons">
+                <c:forEach var = "i" items="${identityProviders}">
+                  <div class="idp-button">
+                    <button type="submit" name="idp" value="${i.ftnIdpId}" id="${i.ftnIdpId}" class="id-button">
+                      <img src="${i.imageUrl}" alt="idp logo" alt="${i.name}"/>
+                      <!--  <p>${i.name}</p> -->
+                    </button>
+                  </div>
+                </c:forEach>
+              </div>
+               <p>${isbProviderInfo}</p>
             </div>
           </div>
         </div>

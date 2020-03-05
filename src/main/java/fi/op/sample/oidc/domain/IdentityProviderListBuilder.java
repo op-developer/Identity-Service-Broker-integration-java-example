@@ -80,7 +80,7 @@ public class IdentityProviderListBuilder {
 
             HttpHost target = new HttpHost(idTokenHost, 443, httpsProtocol);
 
-            HttpGet request = new HttpGet(idTokenPath);
+            HttpGet request = new HttpGet(idTokenPath + "?lang=en");
 
             return parse(get(target, request));
         } catch (Exception e) {

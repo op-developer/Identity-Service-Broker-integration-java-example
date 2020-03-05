@@ -19,7 +19,9 @@ import fi.op.sample.oidc.domain.IdentityProviderListBuilder;
 import fi.op.sample.oidc.domain.OidcRequestParameters;
 import fi.op.sample.oidc.domain.OidcResponseParameters;
 import fi.op.sample.oidc.domain.idp.IdentityProvider;
+import fi.op.sample.oidc.domain.idp.IdentityProviderList;
 import fi.op.sample.oidc.facade.OidcDemoFacade;
+import net.minidev.json.JSONObject;
 
 @Controller
 public class WelcomeController {
@@ -27,11 +29,31 @@ public class WelcomeController {
 
     private OidcDemoFacade facade;
 
+    
     @RequestMapping("/")
     public String welcome(HttpServletRequest request, Map<String, Object> model) throws UnsupportedEncodingException {
-        List<IdentityProvider> idps = new IdentityProviderListBuilder(null).build().getIdentityProviders();
-        model.put("identityProviders", idps);
+        
+    	request.getSession().setAttribute("backurlprefix", "");
+    	
         return "welcome";
+    }   
+    
+    @RequestMapping("/embedded")
+    public String embedded(HttpServletRequest request, Map<String, Object> model) throws UnsupportedEncodingException {
+        
+    	IdentityProviderList idpList = new IdentityProviderListBuilder(null).build();
+    	List<IdentityProvider> idps = idpList.getIdentityProviders();
+        model.put("identityProviders", idps);
+        JSONObject disturbanceInfo = idpList.getDisturbanceInfo();
+        model.put("disturbanceInfo", disturbanceInfo);
+        String isbProviderInfo = idpList.getIsbProviderInfo();
+        model.put("isbProviderInfo", isbProviderInfo);
+        String isbConcent = idpList.getIsbConsent();
+        model.put("isbConsent", isbConcent);
+        
+        request.getSession().setAttribute("backurlprefix", "embedded");
+        
+        return "embedded";
     }
 
     @RequestMapping("/initFlow")
@@ -61,6 +83,7 @@ public class WelcomeController {
         if (response.getError() == null || response.getError().length() == 0) {
             Identity identity = getFacade().extractIdentity(response, originalParams);
             model.put("identity", identity);
+            model.put("backurlprefix", request.getSession().getAttribute("backUrlPost"));
             return "identity";
         } else {
             model.put("error", response.getError());
