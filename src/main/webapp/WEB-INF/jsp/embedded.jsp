@@ -10,7 +10,7 @@
 
   <body>
     <div class="container">
-      <form class="example" action="initFlow">
+
   	  <h1>Demo Service Provider</h1>
       <p>OP Identity Service Broker allows Service Providers (you) to implement strong electronic identification (Finnish bank credentials, Mobile ID) easily to websites and mobile apps via single API.</p>
       <p>This Demo Service Provider gives you three different examples how to integrate to the Identification Service Broker:</p>
@@ -22,7 +22,9 @@
               Self-hosted UI (buttons) embedded into your service
           </li>
       </ol>
-       <div class="row">
+      <form class="example" action="initFlow">
+       	<h2>Self-hosted UI (buttons) embedded into your service</h2>
+       	<div class="row">
             <div class="info">
                 <p>Alternatively you can embed the indentification UI into your service and render it as you like. The end-user is redirected straight from your UI to the selected Identity Provider (bank, Mobile ID) instead of OP&#x27;s hosted UI.</p>
                 <p>After identifying herself the end-user is redirected back to the return_uri you specify in the authentication request. The consent can be set in the request as well.</p>
@@ -55,13 +57,48 @@
                   <input type="radio" name="purpose" value="strong" id="idStrong">
                   <label for="idStrong">New strong credentials</label>
                 </li>
+                               
               </ul>
+              
+             <h5>User Interaface Language</h5>
+             
+             <% String language = (String) request.getSession().getAttribute("language"); %>
+             
+             
+            <ul class="param-group">
+              <li>
+                <input type="radio" name="language" value="fi" id="language_fi" <% if (language.equals("fi")) out.write("checked"); %>  >
+                <label for="language_fi">Finnish</label>
+              </li>
+              <li>
+                <input type="radio" name="language" value="sv" id="language_sv" <% if (language.equals("sv")) out.write("checked"); %>  >
+                <label for="language_sv">Swedish</label>
+              </li>
+              <li>
+                <input type="radio" name="language" value="en" id="language_en" <% if (language.equals("en")) out.write("checked"); %>  >
+                <label for="language_en">English</label>
+              </li>
+              
+                <li>
+                  <button type="submit" class="id-button">Refresh GUI</button>
+                </li>              
+              
+            </ul>             
+              
             </section>
         </div>
+        
+  		<div class="note">
+    		<p>Note that it’s mandatory to display the following texts in the UI even if you embed it into you service:</p>
+    		<ul>
+        		<li>${isbConsent}</li>
+        		<li>${isbProviderInfo}</li>
+    		</ul>
+		</div>        
 
         <h3 class="view-title">
-            Example UI
-                1: Embedded buttons
+            
+              Example UI 2: Embedded buttons
         </h3>
  
         <div class="view">

@@ -23,7 +23,7 @@
                 <a href="embedded">Self-hosted UI (buttons) embedded into your service</a>
             </li>
         </ol>
-
+		<h2>OP’s hosted identification UI</h2>
         <div class="row">
             <div class="info">
                 <p>You can place a button or link or some other call-to-action into your UI which redirects the end-user to OP’s hosted identification UI along with the Open ID Connect authentication request.</p>
@@ -58,12 +58,30 @@
                   <label for="idStrong">New strong credentials</label>
                 </li>
               </ul>
+
+            <h5>User Interaface Language</h5>
+            <ul class="param-group">
+              <li>
+                <input type="radio" name="language" value="fi" id="language_fi" checked>
+                <label for="language_fi">Finnish</label>
+              </li>
+              <li>
+                <input type="radio" name="language" value="sv" id="language_sv">
+                <label for="language_sv">Swedish</label>
+              </li>
+              <li>
+                <input type="radio" name="language" value="en" id="language_en">
+                <label for="language_en">English</label>
+              </li>
+            </ul>
+              
+              
             </section>
         </div>
  
         <h3 class="view-title">
-          Example UI
-            2: OP-hosted buttons
+          
+            Example UI 1: Hosted UI
         </h3>
 
         <div class="view">

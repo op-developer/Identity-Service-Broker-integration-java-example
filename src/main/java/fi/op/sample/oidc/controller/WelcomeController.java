@@ -1,6 +1,8 @@
 package fi.op.sample.oidc.controller;
 
 import java.io.UnsupportedEncodingException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -40,8 +42,11 @@ public class WelcomeController {
     
     @RequestMapping("/embedded")
     public String embedded(HttpServletRequest request, Map<String, Object> model) throws UnsupportedEncodingException {
-        
-    	IdentityProviderList idpList = new IdentityProviderListBuilder(null).build();
+           	
+    	String language = request.getParameter("language");
+    	if (language==null) language="fi"; // Default language is fi
+    	
+    	IdentityProviderList idpList = new IdentityProviderListBuilder(null).build(language);
     	List<IdentityProvider> idps = idpList.getIdentityProviders();
         model.put("identityProviders", idps);
         JSONObject disturbanceInfo = idpList.getDisturbanceInfo();
@@ -50,7 +55,9 @@ public class WelcomeController {
         model.put("isbProviderInfo", isbProviderInfo);
         String isbConcent = idpList.getIsbConsent();
         model.put("isbConsent", isbConcent);
-        
+               
+        // But default GUI language, and GUI type to session (for render) 
+        request.getSession().setAttribute("language", "fi"); // Default language is fi
         request.getSession().setAttribute("backurlprefix", "embedded");
         
         return "embedded";
@@ -64,6 +71,25 @@ public class WelcomeController {
         String requestId = UUID.randomUUID().toString();
         String promptParam = request.getParameter("promptBox");
         String purpose = request.getParameter("purpose");
+             
+        // If embedded initiated authentication started and No IdP parameter in request -> Refresh GUI button pressed
+        // Lets get IdP list and render embedded GUI with selected language
+        
+        if (idp==null && request.getSession().getAttribute("backurlprefix").equals("embedded")) {
+            request.getSession().setAttribute("language", language);
+        	IdentityProviderList idpList = new IdentityProviderListBuilder(null).build(language);
+        	List<IdentityProvider> idps = idpList.getIdentityProviders();
+            model.put("identityProviders", idps);
+            JSONObject disturbanceInfo = idpList.getDisturbanceInfo();
+            model.put("disturbanceInfo", disturbanceInfo);
+            String isbProviderInfo = idpList.getIsbProviderInfo();
+            model.put("isbProviderInfo", isbProviderInfo);
+            String isbConcent = idpList.getIsbConsent();
+            model.put("isbConsent", isbConcent);           
+            request.getSession().setAttribute("backurlprefix", "embedded");
+            return "embedded";       	       	
+        }
+        
         boolean prompt = promptParam != null && promptParam.equals("consent");
         OidcRequestParameters params = getFacade().oidcAuthMessage(idp, language, requestId, prompt, purpose);
         logger.info("Request: {}", params.getRequest());
@@ -80,12 +106,27 @@ public class WelcomeController {
         response.setError(request.getParameter("error"));
         response.setState(request.getParameter("state"));
         response.setCode(request.getParameter("code"));
+        
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd.MM.YYYY HH:mm:ss");  
+        LocalDateTime now = LocalDateTime.now();  
+        String timenow = dtf.format(now);
+        
         if (response.getError() == null || response.getError().length() == 0) {
             Identity identity = getFacade().extractIdentity(response, originalParams);
+            model.put ("timenow", timenow);
             model.put("identity", identity);
             model.put("backurlprefix", request.getSession().getAttribute("backUrlPost"));
             return "identity";
-        } else {
+        } 
+        else if (response.getError().equals("cancel")) {
+        	if (request.getSession().getAttribute("backurlprefix").equals("embedded")) {
+        		return "embedded";
+        	}
+        	else {
+        		return "welcome";
+        	}
+        } 
+        else {
             model.put("error", response.getError());
             return "error";
         }
