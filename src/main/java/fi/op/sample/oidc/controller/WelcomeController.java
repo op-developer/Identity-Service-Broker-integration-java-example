@@ -40,11 +40,7 @@ public class WelcomeController {
         return "welcome";
     }   
     
-    @RequestMapping("/embedded")
-    public String embedded(HttpServletRequest request, Map<String, Object> model) throws UnsupportedEncodingException {
-           	
-    	String language = request.getParameter("language");
-    	if (language==null) language="fi"; // Default language is fi
+    public void prepareEmbeddedMode(String language, Map<String, Object> model) {
     	
     	IdentityProviderList idpList = new IdentityProviderListBuilder(null).build(language);
     	List<IdentityProvider> idps = idpList.getIdentityProviders();
@@ -54,10 +50,26 @@ public class WelcomeController {
         String isbProviderInfo = idpList.getIsbProviderInfo();
         model.put("isbProviderInfo", isbProviderInfo);
         String isbConcent = idpList.getIsbConsent();
-        model.put("isbConsent", isbConcent);
+        model.put("isbConsent", isbConcent);    	   	
+    }
+    
+    @RequestMapping("/embedded")
+    public String embedded(HttpServletRequest request, Map<String, Object> model) throws UnsupportedEncodingException {
+           	
+    	String language = (String) request.getSession().getAttribute("language");
+    	
+    	if (language==null) {
+    		language = request.getParameter("language");
+    		
+    	}
+    	if (language==null) {
+    		language="fi"; // Default language is fi
+    	}
+    	
+    	prepareEmbeddedMode(language, model);
                
         // But default GUI language, and GUI type to session (for render) 
-        request.getSession().setAttribute("language", "fi"); // Default language is fi
+        request.getSession().setAttribute("language", language); 
         request.getSession().setAttribute("backurlprefix", "embedded");
         
         return "embedded";
@@ -77,16 +89,8 @@ public class WelcomeController {
         
         if (idp==null && request.getSession().getAttribute("backurlprefix").equals("embedded")) {
             request.getSession().setAttribute("language", language);
-        	IdentityProviderList idpList = new IdentityProviderListBuilder(null).build(language);
-        	List<IdentityProvider> idps = idpList.getIdentityProviders();
-            model.put("identityProviders", idps);
-            JSONObject disturbanceInfo = idpList.getDisturbanceInfo();
-            model.put("disturbanceInfo", disturbanceInfo);
-            String isbProviderInfo = idpList.getIsbProviderInfo();
-            model.put("isbProviderInfo", isbProviderInfo);
-            String isbConcent = idpList.getIsbConsent();
-            model.put("isbConsent", isbConcent);           
-            request.getSession().setAttribute("backurlprefix", "embedded");
+        	prepareEmbeddedMode(language, model);       	
+            request.getSession().setAttribute("backurlprefix", "embedded");        	
             return "embedded";       	       	
         }
         
@@ -124,15 +128,7 @@ public class WelcomeController {
         	// from session
         	if (request.getSession().getAttribute("backurlprefix").equals("embedded")) {
                 String language = (String) request.getSession().getAttribute("language");
-            	IdentityProviderList idpList = new IdentityProviderListBuilder(null).build(language);
-            	List<IdentityProvider> idps = idpList.getIdentityProviders();
-                model.put("identityProviders", idps);
-                JSONObject disturbanceInfo = idpList.getDisturbanceInfo();
-                model.put("disturbanceInfo", disturbanceInfo);
-                String isbProviderInfo = idpList.getIsbProviderInfo();
-                model.put("isbProviderInfo", isbProviderInfo);
-                String isbConcent = idpList.getIsbConsent();
-                model.put("isbConsent", isbConcent);           
+            	prepareEmbeddedMode(language, model);                
                 request.getSession().setAttribute("backurlprefix", "embedded");       		
         		return "embedded";
         	}
