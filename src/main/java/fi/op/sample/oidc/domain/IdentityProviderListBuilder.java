@@ -70,7 +70,7 @@ public class IdentityProviderListBuilder {
      * 
      * @return The list of identity providers.
      */
-    public IdentityProviderList build() {
+    public IdentityProviderList build(String language) {
         try {
             logger.info("Listing identity providers from {}", this.idpUrl);
             URL url = new URL(this.idpUrl);
@@ -80,7 +80,7 @@ public class IdentityProviderListBuilder {
 
             HttpHost target = new HttpHost(idTokenHost, 443, httpsProtocol);
 
-            HttpGet request = new HttpGet(idTokenPath);
+            HttpGet request = new HttpGet(idTokenPath+"?lang="+language);
 
             return parse(get(target, request));
         } catch (Exception e) {

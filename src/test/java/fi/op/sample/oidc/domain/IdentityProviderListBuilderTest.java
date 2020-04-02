@@ -23,7 +23,7 @@ public class IdentityProviderListBuilderTest {
     @Test
     public void testIdentityProviderListBuilder() {
         IdentityProviderListBuilder sut = new IdentityProviderListBuilder(null);
-        IdentityProviderList result = sut.build();
+        IdentityProviderList result = sut.build("en");
         Assert.assertTrue(result.getIdentityProviders().size() > 0);
     }
 

@@ -19,7 +19,7 @@ public class IdentityProviderList {
     private String isbProviderInfo;
     private String isbConsent;
     private JSONObject disturbanceInfo;
-
+    
     // "isbProviderInfo":"OP Tunnistuksen välityspalvelun tarjoaa OP Ryhmän osuuspankit ja OP Yrityspankki Oyj.",
     // "isbConsent":"Tunnistautumalla seuraavilla tunnistustavoilla hyväksyt, että palveluntarjoajalle välitetään:
     // henkilötunnus, nimi.",

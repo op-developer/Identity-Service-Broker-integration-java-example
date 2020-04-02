@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 
 import com.nimbusds.jose.JOSEException;
 import com.nimbusds.jose.JWEDecrypter;
+import com.nimbusds.jose.Payload;
 import com.nimbusds.jose.crypto.RSADecrypter;
 import com.nimbusds.jose.crypto.RSASSAVerifier;
 import com.nimbusds.jwt.EncryptedJWT;
@@ -52,13 +53,14 @@ public class IdTokenHandler {
                     .getPublicKey();
             verifySignature(decrypted, signatureVerificationKey);
             JWTClaimsSet claims = decrypted.getJWTClaimsSet();
-            for (String claim : claims.getClaims().keySet()) {
-                Object value = claims.getClaim(claim);
-                if (value instanceof String) {
-                    logger.info("Claim: {}, value: {}", claim, value);
-                }
-            }
+            
+            String idRawData=decrypted.getPayload().toString();
+            logger.info("Payload: " + idRawData);
+            idRawData = idRawData.replace(",", ",\n\t");
+            idRawData = idRawData.replace("{", "{\n\t");
+            idRawData = idRawData.replace("}", "\n}");            
             Identity identity = new Identity();
+            identity.setIdentityRawData(idRawData);
             identity.setName(claims.getStringClaim("name"));
             identity.setSsn(claims.getStringClaim("personal_identity_code"));
             return identity;
