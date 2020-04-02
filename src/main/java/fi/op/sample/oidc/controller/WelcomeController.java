@@ -119,7 +119,21 @@ public class WelcomeController {
             return "identity";
         } 
         else if (response.getError().equals("cancel")) {
+        	// If embedded GUI used to initiate authentication and it has been canceled lets render 
+        	// it again. The list of IdPs must be collected from ISB. Selected language can be found 
+        	// from session
         	if (request.getSession().getAttribute("backurlprefix").equals("embedded")) {
+                String language = (String) request.getSession().getAttribute("language");
+            	IdentityProviderList idpList = new IdentityProviderListBuilder(null).build(language);
+            	List<IdentityProvider> idps = idpList.getIdentityProviders();
+                model.put("identityProviders", idps);
+                JSONObject disturbanceInfo = idpList.getDisturbanceInfo();
+                model.put("disturbanceInfo", disturbanceInfo);
+                String isbProviderInfo = idpList.getIsbProviderInfo();
+                model.put("isbProviderInfo", isbProviderInfo);
+                String isbConcent = idpList.getIsbConsent();
+                model.put("isbConsent", isbConcent);           
+                request.getSession().setAttribute("backurlprefix", "embedded");       		
         		return "embedded";
         	}
         	else {

@@ -22,7 +22,7 @@
               Self-hosted UI (buttons) embedded into your service
           </li>
       </ol>
-      <form class="example" action="initFlow">
+      <form class="example" action="initFlow" id="initFlow">
        	<h2>Self-hosted UI (buttons) embedded into your service</h2>
        	<div class="row">
             <div class="info">
@@ -64,24 +64,27 @@
              
              <% String language = (String) request.getSession().getAttribute("language"); %>
              
-             
+			<script>
+			function autoSubmit()
+			{
+			    var formObject = document.forms['initFlow'];
+			    formObject.submit();
+			}
+			</script>   
+			          
             <ul class="param-group">
               <li>
-                <input type="radio" name="language" value="fi" id="language_fi" <% if (language.equals("fi")) out.write("checked"); %>  >
+                <input type="radio" name="language" onChange="autoSubmit();" value="fi" id="language_fi" <% if (language.equals("fi")) out.write("checked"); %>  >
                 <label for="language_fi">Finnish</label>
               </li>
               <li>
-                <input type="radio" name="language" value="sv" id="language_sv" <% if (language.equals("sv")) out.write("checked"); %>  >
+                <input type="radio" name="language" onChange="autoSubmit();" value="sv" id="language_sv" <% if (language.equals("sv")) out.write("checked"); %>  >
                 <label for="language_sv">Swedish</label>
               </li>
               <li>
-                <input type="radio" name="language" value="en" id="language_en" <% if (language.equals("en")) out.write("checked"); %>  >
+                <input type="radio" name="language" onChange="autoSubmit();" value="en" id="language_en" <% if (language.equals("en")) out.write("checked"); %>  >
                 <label for="language_en">English</label>
-              </li>
-              
-                <li>
-                  <button type="submit" class="id-button">Refresh GUI</button>
-                </li>              
+              </li>           
               
             </ul>             
               
