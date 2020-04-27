@@ -43,7 +43,13 @@ public class WelcomeController {
     public void prepareEmbeddedMode(String language, Map<String, Object> model) {
     	
     	IdentityProviderList idpList = new IdentityProviderListBuilder(null).build(language);
+    	
     	List<IdentityProvider> idps = idpList.getIdentityProviders();
+    	
+    	String dInfo = idpList.getDisturbanceInfo().getAsString("text");
+    	String dInfo2 = dInfo.replace("\n", "<br> <br>"); // Make sure that if multiple disturbances they are their own lines
+    	idpList.getDisturbanceInfo().put("text", dInfo2);  	
+    	
         model.put("identityProviders", idps);
         JSONObject disturbanceInfo = idpList.getDisturbanceInfo();
         model.put("disturbanceInfo", disturbanceInfo);
