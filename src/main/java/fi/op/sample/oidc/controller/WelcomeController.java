@@ -40,16 +40,22 @@ public class WelcomeController {
         return "welcome";
     }   
     
-    public void prepareEmbeddedMode(String language, Map<String, Object> model) {
-    	
+    public void prepareEmbeddedMode(String language, Map<String, Object> model, HttpServletRequest request) {
+    	    	
     	IdentityProviderList idpList = new IdentityProviderListBuilder(null).build(language);
     	
     	List<IdentityProvider> idps = idpList.getIdentityProviders();
     	
-    	String dInfo = idpList.getDisturbanceInfo().getAsString("text");
-    	String dInfo2 = dInfo.replace("\n", "<br> <br>"); // Make sure that if multiple disturbances they are their own lines
-    	idpList.getDisturbanceInfo().put("text", dInfo2);  	
-    	
+    	if (idpList.getDisturbanceInfo()!=null) {
+        	String dInfo = idpList.getDisturbanceInfo().getAsString("text");
+        	String dInfo2 = dInfo.replace("\n", "<br> <br>"); 					// Make sure that if multiple disturbances they are their own lines
+        	idpList.getDisturbanceInfo().put("text", dInfo2);
+    		request.getSession().setAttribute("disturbanceinfo", "yes");      	
+    	} 
+    	else {
+    		request.getSession().setAttribute("disturbanceinfo", "no");    		
+    	}
+    	    	
         model.put("identityProviders", idps);
         JSONObject disturbanceInfo = idpList.getDisturbanceInfo();
         model.put("disturbanceInfo", disturbanceInfo);
@@ -61,7 +67,7 @@ public class WelcomeController {
     
     @RequestMapping("/embedded")
     public String embedded(HttpServletRequest request, Map<String, Object> model) throws UnsupportedEncodingException {
-           	
+        
     	String language = (String) request.getSession().getAttribute("language");
     	
     	if (language==null) {
@@ -72,8 +78,8 @@ public class WelcomeController {
     		language="fi"; // Default language is fi
     	}
     	
-    	prepareEmbeddedMode(language, model);
-               
+    	prepareEmbeddedMode(language, model, request);
+    	
         // But default GUI language, and GUI type to session (for render) 
         request.getSession().setAttribute("language", language); 
         request.getSession().setAttribute("backurlprefix", "embedded");
@@ -83,7 +89,7 @@ public class WelcomeController {
 
     @RequestMapping("/initFlow")
     public String initFlow(HttpServletRequest request, Map<String, Object> model) {
-
+   	
         String language = request.getParameter("language");
         String idp = request.getParameter("idp");
         String requestId = UUID.randomUUID().toString();
@@ -95,10 +101,12 @@ public class WelcomeController {
         
         if (idp==null && request.getSession().getAttribute("backurlprefix").equals("embedded")) {
             request.getSession().setAttribute("language", language);
-        	prepareEmbeddedMode(language, model);       	
+        	prepareEmbeddedMode(language, model, request);       	
             request.getSession().setAttribute("backurlprefix", "embedded");        	
             return "embedded";       	       	
         }
+        
+       
         
         boolean prompt = promptParam != null && promptParam.equals("consent");
         OidcRequestParameters params = getFacade().oidcAuthMessage(idp, language, requestId, prompt, purpose);
@@ -134,7 +142,7 @@ public class WelcomeController {
         	// from session
         	if (request.getSession().getAttribute("backurlprefix").equals("embedded")) {
                 String language = (String) request.getSession().getAttribute("language");
-            	prepareEmbeddedMode(language, model);                
+            	prepareEmbeddedMode(language, model, request);                
                 request.getSession().setAttribute("backurlprefix", "embedded");       		
         		return "embedded";
         	}
