@@ -46,9 +46,11 @@ public class WelcomeController {
     	
     	List<IdentityProvider> idps = idpList.getIdentityProviders();
     	
-    	String dInfo = idpList.getDisturbanceInfo().getAsString("text");
-    	String dInfo2 = dInfo.replace("\n", "<br> <br>"); // Make sure that if multiple disturbances they are their own lines
-    	idpList.getDisturbanceInfo().put("text", dInfo2);  	
+    	if (idpList.getDisturbanceInfo()!=null) {
+        	String dInfo = idpList.getDisturbanceInfo().getAsString("text");
+        	String dInfo2 = dInfo.replace("\n", "<br> <br>"); 					// Make sure that if multiple disturbances they are their own lines
+        	idpList.getDisturbanceInfo().put("text", dInfo2);    		
+    	} 
     	
         model.put("identityProviders", idps);
         JSONObject disturbanceInfo = idpList.getDisturbanceInfo();
