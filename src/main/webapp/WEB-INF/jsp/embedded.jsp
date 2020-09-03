@@ -108,10 +108,19 @@
           <div class="view-layout">
             <div class="view-main">
 			   <p>${isbConsent}</p>
+			   <%
+			   		if (((String)(request.getSession().getAttribute("disturbanceinfo"))).equals("yes")) {
+			   			
+			   %>
                <div class="alert -info">
                     <h3 class="disturbanceTitle"> ${disturbanceInfo.header } </h3>
                     <div class="disturbanceMessage"> ${disturbanceInfo.text } </div>
                 </div>
+                
+               <%
+               		}
+               %> 
+                
               <div class="idp-buttons">
                 <c:forEach var = "i" items="${identityProviders}">
                   <div class="idp-button">
