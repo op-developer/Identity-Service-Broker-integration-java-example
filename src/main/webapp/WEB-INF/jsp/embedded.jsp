@@ -28,7 +28,7 @@
             <div class="info">
                 <p>Alternatively you can embed the indentification UI into your service and render it as you like. The end-user is redirected straight from your UI to the selected Identity Provider (bank, Mobile ID) instead of OP&#x27;s hosted UI.</p>
                 <p>After identifying herself the end-user is redirected back to the return_uri you specify in the authentication request. The consent can be set in the request as well.</p>
-                <p><a href="https://github.com/op-developer/Identity-Service-Broker-API/blob/master/README.md" target="_blank">See the API docs for more information.</a></p> 
+                <p><a href="https://github.com/op-developer/Identity-Service-Broker-API/blob/master/README.md" target="_blank">See the API docs for more information.</a></p>
            </div>
             <section class="params">
               <h3>Parameters for the identification request:</h3>
@@ -47,31 +47,31 @@
                   <input type="radio" name="purpose" value="normal" id="idBasic" checked>
                   <label for="idBasic">Basic identification</label>
                 </li>
-            
+
                 <li>
                   <input type="radio" name="purpose" value="weak" id="idWeak">
                   <label for="idWeak">New weak credentials</label>
                 </li>
-            
+
                 <li>
                   <input type="radio" name="purpose" value="strong" id="idStrong">
                   <label for="idStrong">New strong credentials</label>
                 </li>
-                               
+
               </ul>
-              
+
              <h5>User Interaface Language</h5>
-             
+
              <% String language = (String) request.getSession().getAttribute("language"); %>
-             
+
 			<script>
 			function autoSubmit()
 			{
 			    var formObject = document.forms['initFlow'];
 			    formObject.submit();
 			}
-			</script>   
-			          
+			</script>
+
             <ul class="param-group">
               <li>
                 <input type="radio" name="language" onChange="autoSubmit();" value="fi" id="language_fi" <% if (language.equals("fi")) out.write("checked"); %>  >
@@ -84,43 +84,45 @@
               <li>
                 <input type="radio" name="language" onChange="autoSubmit();" value="en" id="language_en" <% if (language.equals("en")) out.write("checked"); %>  >
                 <label for="language_en">English</label>
-              </li>           
-              
-            </ul>             
-              
+              </li>
+
+            </ul>
+
             </section>
         </div>
-        
+
   		<div class="note">
     		<p>Note that it’s mandatory to display the following texts in the UI even if you embed it into you service:</p>
     		<ul>
         		<li>${isbConsent}</li>
-        		<li>${isbProviderInfo}</li>
+            <li>${isbProviderInfo}</li>
+            <li><a href=${privacyNoticeLink} target="_blank">${privacyNoticeText}</a></li>
     		</ul>
-		</div>        
+		</div>
 
         <h3 class="view-title">
-            
+
               Example UI 2: Embedded buttons
         </h3>
- 
+
         <div class="view">
           <div class="view-layout">
             <div class="view-main">
-			   <p>${isbConsent}</p>
+         <p class="view-left">${isbConsent}</p>
+         <p class="view-left"><a href=${privacyNoticeLink} target="_blank">${privacyNoticeText}</a></p>
 			   <%
 			   		if (((String)(request.getSession().getAttribute("disturbanceinfo"))).equals("yes")) {
-			   			
+
 			   %>
                <div class="alert -info">
                     <h3 class="disturbanceTitle"> ${disturbanceInfo.header } </h3>
                     <div class="disturbanceMessage"> ${disturbanceInfo.text } </div>
                 </div>
-                
+
                <%
                		}
-               %> 
-                
+               %>
+
               <div class="idp-buttons">
                 <c:forEach var = "i" items="${identityProviders}">
                   <div class="idp-button">
@@ -131,7 +133,7 @@
                   </div>
                 </c:forEach>
               </div>
-               <p>${isbProviderInfo}</p>
+               <p class="view-left">${isbProviderInfo}</p>
             </div>
           </div>
         </div>
