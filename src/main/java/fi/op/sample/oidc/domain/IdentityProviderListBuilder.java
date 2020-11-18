@@ -56,7 +56,7 @@ public class IdentityProviderListBuilder {
         CloseableHttpResponse response = httpclient.execute(target, request);
 
         BufferedReader reader = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
-        String jwt = reader.readLine();
+        String jwt = reader.readLine().replaceAll("\\<.*?>", ""); // strip possible html
         logger.info("Identity provider list: {}", jwt);
 
         reader.close();
@@ -67,7 +67,7 @@ public class IdentityProviderListBuilder {
 
     /**
      * Retrieves the list of identity providers from the identity broker.
-     * 
+     *
      * @return The list of identity providers.
      */
     public IdentityProviderList build(String language) {
