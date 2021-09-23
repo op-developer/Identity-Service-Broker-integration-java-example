@@ -2,7 +2,6 @@ package fi.op.sample.oidc.domain;
 
 import java.io.Serializable;
 
-import com.nimbusds.jwt.JWTClaimsSet;
 
 /**
  * User's authenticated identity.
@@ -23,7 +22,7 @@ public class Identity implements Serializable {
     // First & maybe middle / last name.
     private String name;
     private String identityRawData;
-    
+
     public Identity() {
         // Does nothing but required by SonarQube.
     }

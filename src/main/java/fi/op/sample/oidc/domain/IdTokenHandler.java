@@ -8,7 +8,6 @@ import org.slf4j.LoggerFactory;
 
 import com.nimbusds.jose.JOSEException;
 import com.nimbusds.jose.JWEDecrypter;
-import com.nimbusds.jose.Payload;
 import com.nimbusds.jose.crypto.RSADecrypter;
 import com.nimbusds.jose.crypto.RSASSAVerifier;
 import com.nimbusds.jwt.EncryptedJWT;
@@ -17,9 +16,9 @@ import com.nimbusds.jwt.SignedJWT;
 
 /**
  * Decrypts ID token (using the private key from keystore)
- * 
+ *
  * Verifies ID token signature (using the public key of identity broker)
- * 
+ *
  * Extracts identity from ID token.
  *
  * <p>
@@ -53,12 +52,12 @@ public class IdTokenHandler {
                     .getPublicKey();
             verifySignature(decrypted, signatureVerificationKey);
             JWTClaimsSet claims = decrypted.getJWTClaimsSet();
-            
+
             String idRawData=decrypted.getPayload().toString();
             logger.info("Payload: " + idRawData);
             idRawData = idRawData.replace(",", ",\n\t");
             idRawData = idRawData.replace("{", "{\n\t");
-            idRawData = idRawData.replace("}", "\n}");            
+            idRawData = idRawData.replace("}", "\n}");
             Identity identity = new Identity();
             identity.setIdentityRawData(idRawData);
             identity.setName(claims.getStringClaim("name"));
