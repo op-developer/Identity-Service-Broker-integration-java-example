@@ -60,7 +60,7 @@ public class KeystoreLoader extends KeyCache {
 
     /**
      * Loads a key from keystore.
-     * 
+     *
      * @param keyAlias
      *            Key name.
      * @return The key
@@ -168,10 +168,7 @@ public class KeystoreLoader extends KeyCache {
                 RSAPrivateCrtKey key = (RSAPrivateCrtKey) getKeyFromJKS(alias);
 
                 oidcKey.setPrivateKey(key);
-
-                if (doShow) {
-                    oidcKey.setPublicKey(derivePublicKey(key));
-                }
+                oidcKey.setPublicKey(derivePublicKey(key));
 
                 result.add(oidcKey);
             } catch (PropertyNotFoundException e) {
@@ -205,6 +202,17 @@ public class KeystoreLoader extends KeyCache {
         }
 
         return fallback;
+    }
+
+    public OidcKey getEntityKey() {
+        for (OidcKey key : getKeys()) {
+            // It must match the alias of the entity key
+            if (key.getAlias().equals("sandbox-sp-entity-key")) {
+                return key;
+            }
+        }
+
+        return null;
     }
 
 }

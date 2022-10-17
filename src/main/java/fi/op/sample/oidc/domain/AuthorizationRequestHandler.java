@@ -28,7 +28,7 @@ public class AuthorizationRequestHandler {
 
     /**
      * Constructor for AuthorizationRequestHandler
-     * 
+     *
      * @param keyLoader
      *            Keystore loader.
      */
@@ -38,7 +38,7 @@ public class AuthorizationRequestHandler {
 
     /**
      * Wraps authentication request parameters into a signed Java Web Token.
-     * 
+     *
      * @param params
      *            Authentication request parameters.
      */
@@ -46,7 +46,7 @@ public class AuthorizationRequestHandler {
         PrivateKey signingKey = keyLoader.getSigningKey().getPrivateKey();
 
         // Authentication request parameters documented here:
-        // https://github.com/CheckoutFinland/Identity-Service-Broker-API
+        // https://github.com/op-developer/Identity-Service-Broker-API
         JWTClaimsSet.Builder builder = new JWTClaimsSet.Builder() //
                 .claim("client_id", params.getClientId()) //
                 .claim("redirect_uri", params.getRedirectUri()) //
@@ -55,7 +55,8 @@ public class AuthorizationRequestHandler {
                 .claim("state", params.getState()) //
                 .claim("nonce", params.getNonce()) //
                 .claim("prompt", params.getPrompt()) //
-                .claim("ui_locales", params.getUiLocales());
+                .claim("ui_locales", params.getUiLocales())
+                .claim("ftn_spname", params.getSpName());
 
         if (params.getFtnIdpId() != null) {
             builder = builder.claim("ftn_idp_id", params.getFtnIdpId());

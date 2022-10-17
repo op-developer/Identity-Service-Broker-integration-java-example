@@ -32,11 +32,6 @@ import com.nimbusds.jwt.SignedJWT;
 public class IdTokenHandler {
     private final org.slf4j.Logger logger = LoggerFactory.getLogger(IdTokenHandler.class);
 
-    private final KeystoreLoader keyLoader;
-
-    public IdTokenHandler(KeystoreLoader keyLoader) {
-        this.keyLoader = keyLoader;
-    }
 
     public Identity extractIdentity(String idToken, KeystoreLoader keystore, JwksLoader jwksLoader) {
         try {
