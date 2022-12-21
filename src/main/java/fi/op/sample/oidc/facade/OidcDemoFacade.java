@@ -160,9 +160,9 @@ public class OidcDemoFacade {
 
             if (key.getShowInJwks()) {
                 // create JWKS
-                RSAKey jwkKey = new RSAKey.Builder(key.getPublicKey()) //
-                        .keyID(key.getKeyId()) //
-                        .keyUse(keyUse) //
+                RSAKey jwkKey = new RSAKey.Builder(key.getPublicKey())
+                        .keyID(key.getKeyId())
+                        .keyUse(keyUse)
                         .build();
                 webKeys.add(jwkKey);
             }

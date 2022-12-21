@@ -90,8 +90,7 @@ public class AuthorizationCodeHandler {
     }
 
     String parseIdToken(String jsonResponse) {
-        JsonElement jelement = JsonParser.parseString(jsonResponse).getAsJsonObject();
-        JsonObject jobject = jelement.getAsJsonObject();
+        JsonObject jobject = JsonParser.parseString(jsonResponse).getAsJsonObject();
         return jobject.get("id_token").getAsString();
     }
 

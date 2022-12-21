@@ -15,7 +15,7 @@ public class Configuration {
     public static final String KEYSTORE_LOCATION = "saippuakauppias.jks";
 
     public static final String CLIENT_ID = "saippuakauppias";
-    public static final String FTN_SPNAME = "soap merchant";
+    public static final String FTN_SPNAME = "Soap for the people";
     public static final String RESPONSE_TYPE = "code";
     public static final String AUTHORIZE_URL = "https://isb-test.op.fi/oauth/authorize";
     public static final String JWKS_PROXY = "https://isb-test.op.fi/jwks/broker-signed";
