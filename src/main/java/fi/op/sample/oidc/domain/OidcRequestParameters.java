@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 /**
  * Transfer object of OIDC settings.
- * 
+ *
  *
  * @author OP-Palvelut Oy
  * @license http://www.gnu.org/copyleft/gpl.html GNU General Public License
@@ -19,6 +19,9 @@ public class OidcRequestParameters implements Serializable {
 
     // OIDC client id.
     private String clientId;
+
+    // ftn_spname
+    private String ftnSPname;
 
     // URL where user's browser returns after identification flow.
     private String redirectUri;
@@ -71,6 +74,14 @@ public class OidcRequestParameters implements Serializable {
 
     public void setClientId(String clientId) {
         this.clientId = clientId;
+    }
+
+    public String getSpName() {
+        return ftnSPname;
+    }
+
+    public void setSpName(String ftnSpName) {
+        this.ftnSPname = ftnSpName;
     }
 
     public String getRedirectUri() {

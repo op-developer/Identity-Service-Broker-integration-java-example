@@ -160,10 +160,16 @@ public class WelcomeController {
         }
     }
 
-    @RequestMapping(method = { RequestMethod.GET }, value = "/jwks", produces = "application/json; charset=utf-8")
+    @RequestMapping(method = { RequestMethod.GET }, value = "/signed-jwks", produces = "application/jose; charset=utf-8")
     @ResponseBody
-    public String jwks() {
-        return getFacade().getJwks();
+    public String signedJwks() {
+        return getFacade().getSignedJwks();
+    }
+
+    @RequestMapping(method = { RequestMethod.GET }, value = "/.well-known/openid-federation", produces = "application/entity-statement+jwt; charset=utf-8")
+    @ResponseBody
+    public String entityStatement() {
+        return getFacade().getEntityStatement();
     }
 
     private OidcDemoFacade getFacade() {
