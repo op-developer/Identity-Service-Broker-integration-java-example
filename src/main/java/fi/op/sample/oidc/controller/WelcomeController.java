@@ -160,7 +160,7 @@ public class WelcomeController {
         }
     }
 
-    @RequestMapping(method = { RequestMethod.GET }, value = "/signed-jwks", produces = "application/jose; charset=utf-8")
+    @RequestMapping(method = { RequestMethod.GET }, value = "/signed-jwks", produces = "application/jwk-set+jwt; charset=utf-8")
     @ResponseBody
     public String signedJwks() {
         return getFacade().getSignedJwks();
