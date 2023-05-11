@@ -242,7 +242,7 @@ public class OidcDemoFacade {
             .subject(Configuration.SP_HOST)
             .issueTime(new Date())
             .expirationTime(new Date(timeNow + 1000 * 60 * 60 * 25)) // 25h
-            .claim("jwks", jwkSet.toJSONObject().get("keys"))
+            .claim("jwks", jwkSet.toJSONObject())
             .claim("metadata", JSONValue.parse(openIdRelyingParty.toString()))
             .build();
 
