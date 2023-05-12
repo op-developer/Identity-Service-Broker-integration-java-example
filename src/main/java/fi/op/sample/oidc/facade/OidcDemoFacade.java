@@ -2,6 +2,7 @@ package fi.op.sample.oidc.facade;
 
 import java.security.PrivateKey;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -220,7 +221,6 @@ public class OidcDemoFacade {
         String keyId = entityKey.getKeyId();
 
         // create Entity Statement JSON web token
-        long timeNow = new Date().getTime();
 
         JsonObject openIdRelyingParty = new JsonObject();
         JsonArray redirectUris = new JsonArray();
@@ -237,13 +237,21 @@ public class OidcDemoFacade {
         openIdRelyingParty.addProperty("organization_name", "Saippuakauppias");
         openIdRelyingParty.addProperty("signed_jwks_uri", Configuration.SP_HOST + "/signed-jwks");
 
+        JsonObject metadataJsonObject = new JsonObject();
+        metadataJsonObject.add("openid_relying_party", openIdRelyingParty);
+
+        // ten years
+        Calendar c = Calendar.getInstance();
+        c.setTime(new Date());
+        c.add(Calendar.YEAR, 10);
+
         JWTClaimsSet claimsSet = new JWTClaimsSet.Builder()
             .issuer(Configuration.SP_HOST)
             .subject(Configuration.SP_HOST)
             .issueTime(new Date())
-            .expirationTime(new Date(timeNow + 1000 * 60 * 60 * 25)) // 25h
+            .expirationTime(c.getTime())
             .claim("jwks", jwkSet.toJSONObject())
-            .claim("metadata", JSONValue.parse(openIdRelyingParty.toString()))
+            .claim("metadata", JSONValue.parse(metadataJsonObject.toString()))
             .build();
 
         JWSHeader header = new JWSHeader
