@@ -20,7 +20,6 @@ import org.apache.http.impl.client.HttpClients;
 import org.apache.http.message.BasicNameValuePair;
 import org.slf4j.LoggerFactory;
 
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.nimbusds.jose.JOSEException;
@@ -104,7 +103,10 @@ public class AuthorizationCodeHandler {
                 .expirationTime(new Date(new Date().getTime() + 600l * 1000l)) //
                 .build();
 
-        JWSHeader header = new JWSHeader.Builder(JWSAlgorithm.RS256).type(JOSEObjectType.JWT).build();
+        JWSHeader header = new JWSHeader.Builder(JWSAlgorithm.RS256)
+            .type(JOSEObjectType.JWT)
+            .keyID(keyLoader.getSigningKey().getKeyId())
+            .build();
 
         SignedJWT jwt = new SignedJWT(header, claimsSet);
         JWSSigner signer = new RSASSASigner(signingKey);
