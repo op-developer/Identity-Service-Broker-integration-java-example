@@ -64,7 +64,10 @@ public class AuthorizationRequestHandler {
 
         JWTClaimsSet claimsSet = builder.build();
 
-        JWSHeader header = new JWSHeader.Builder(JWSAlgorithm.RS256).type(JOSEObjectType.JWT).build();
+        JWSHeader header = new JWSHeader.Builder(JWSAlgorithm.RS256)
+            .type(JOSEObjectType.JWT)
+            .keyID(keyLoader.getSigningKey().getKeyId())
+            .build();
 
         SignedJWT jwt = new SignedJWT(header, claimsSet);
         JWSSigner signer = new RSASSASigner(signingKey);
