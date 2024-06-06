@@ -20,7 +20,6 @@ import com.nimbusds.jose.jwk.JWK;
 import com.nimbusds.jose.jwk.JWKSet;
 import com.nimbusds.jose.jwk.KeyUse;
 import com.nimbusds.jose.jwk.RSAKey;
-import com.nimbusds.jose.shaded.json.JSONValue;
 import com.nimbusds.jose.JWSHeader;
 import com.nimbusds.jose.JWSSigner;
 import com.nimbusds.jose.crypto.RSASSASigner;
@@ -38,6 +37,7 @@ import fi.op.sample.oidc.domain.OidcDemoException;
 import fi.op.sample.oidc.domain.OidcKey;
 import fi.op.sample.oidc.domain.OidcRequestParameters;
 import fi.op.sample.oidc.domain.OidcResponseParameters;
+import net.minidev.json.JSONValue;
 
 /**
  * OIDC Demo facade implementation.
