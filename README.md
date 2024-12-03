@@ -41,7 +41,7 @@ Screenshot for the Service Provider example:
 ![Screenshot1](images/screenshot1.png)
 
 ## Requirements
-- Recent Java 8 or newer (TLS handshake error means too old Java.)
+- Java 17 or newer
 - Maven
 - Port 8080 needs to be free on the host computer
 
@@ -79,7 +79,7 @@ Please note that this integration example demo application has the following ide
     - The X-XSS-Protection header is not defined. This header can hint to the user agent to protect against some forms of XSS
     - The X-Content-Type-Options header is not set. This could allow the user agent to render the content of the site in a different fashion to the MIME type
     - HTTP Strict-Transport-Security header is not set. This demo application uses http, not https. https has to be used in production and then this header is mandatory
-- Cookie is not protected. In production the httpOnly flag must be added to the PHPSESSID cookie.
+- Cookie is not protected. In production the "Secure" flag must be added to the JSESSIONID cookie.
 - The error page is vulnerable to reflected Cross-site scripting. In production there should be input validation and output encoding.
 - Demo application information leakage. It is possible to get some details about the system by using malformed input parameters, or in certain case, by calling
 the same method again with the same information. Also errors expose details on purpose to help the integration work. In production there should be user input
