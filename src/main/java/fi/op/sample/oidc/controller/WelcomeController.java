@@ -41,8 +41,7 @@ public class WelcomeController {
     }
 
     public void prepareEmbeddedMode(String language, Map<String, Object> model, HttpServletRequest request) {
-
-        IdentityProviderList idpList = new IdentityProviderListBuilder(null).build(language);
+        IdentityProviderList idpList = new IdentityProviderListBuilder().build(language);
 
     	List<IdentityProvider> idps = idpList.getIdentityProviders();
 

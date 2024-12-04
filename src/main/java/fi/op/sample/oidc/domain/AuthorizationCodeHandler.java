@@ -1,24 +1,15 @@
 package fi.op.sample.oidc.domain;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.URL;
+import java.net.URI;
 import java.security.PrivateKey;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
-import org.apache.http.HttpHost;
-import org.apache.http.NameValuePair;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
-import org.apache.http.client.methods.CloseableHttpResponse;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClients;
-import org.apache.http.message.BasicNameValuePair;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.MediaType;
+import org.springframework.util.MultiValueMap;
+import org.springframework.web.client.RestClient;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -51,49 +42,31 @@ public class AuthorizationCodeHandler {
     }
 
     public String exchangeForIdToken(String authorizationCode, OidcRequestParameters contract) throws Exception {
+        URI uri = new URI(contract.getTokenProxy());
 
-        URL url = new URL(contract.getTokenProxy());
-        String idTokenHost = url.getHost();
-        String idTokenPath = url.getPath();
-        String httpsProtocol = url.getProtocol();
+        MultiValueMap<String, String> params = MultiValueMap.fromSingleValue(Map.of(
+            "code", authorizationCode,
+            "grant_type", "authorization_code",
+            "client_assertion_type", "urn:ietf:params:oauth:client-assertion-type:jwt-bearer",
+            "client_assertion", createSignedClientAssertion(contract)));
 
-        HttpHost target = new HttpHost(idTokenHost, 443, httpsProtocol);
+        logger.info("Executing POST request to {}", uri);
+        String response = RestClient.create(uri)
+            .post()
+            .contentType(MediaType.APPLICATION_FORM_URLENCODED)
+            .body(params)
+            .retrieve()
+            .body(String.class);
 
-        HttpPost request = new HttpPost(idTokenPath);
-
-        List<NameValuePair> params = new ArrayList<>();
-        params.add(new BasicNameValuePair("code", authorizationCode));
-        params.add(new BasicNameValuePair("grant_type", "authorization_code"));
-        params.add(new BasicNameValuePair("client_assertion_type",
-                "urn:ietf:params:oauth:client-assertion-type:jwt-bearer"));
-        params.add(new BasicNameValuePair("client_assertion", createSignedClientAssertion(contract)));
-
-        request.setEntity(new UrlEncodedFormEntity(params));
-        logger.info("Executing request {} to {}", request.getRequestLine(), target);
-
-        return parseIdToken(post(target, request));
+        return parseIdToken(response);
     }
 
-    String post(HttpHost target, HttpPost request) throws IOException {
-        CloseableHttpClient httpclient = HttpClients.createDefault();
-        CloseableHttpResponse response = httpclient.execute(target, request);
-
-        BufferedReader reader = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
-        String jwt = reader.readLine();
-        logger.info("ID token: {}", jwt);
-
-        reader.close();
-        response.close();
-        httpclient.close();
-        return jwt;
-    }
-
-    String parseIdToken(String jsonResponse) {
+    private String parseIdToken(String jsonResponse) {
         JsonObject jobject = JsonParser.parseString(jsonResponse).getAsJsonObject();
         return jobject.get("id_token").getAsString();
     }
 
-    String createSignedClientAssertion(OidcRequestParameters params) throws JOSEException {
+    private String createSignedClientAssertion(OidcRequestParameters params) throws JOSEException {
         PrivateKey signingKey = keyLoader.getSigningKey().getPrivateKey();
 
         JWTClaimsSet claimsSet = new JWTClaimsSet.Builder() //

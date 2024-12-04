@@ -1,9 +1,7 @@
 package fi.op.sample.oidc.domain;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.URL;
+import java.net.URI;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -11,16 +9,12 @@ import java.security.KeyFactory;
 import java.security.interfaces.RSAPublicKey;
 import java.security.spec.X509EncodedKeySpec;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.Date;
 import java.util.List;
 
-import org.apache.commons.codec.binary.Base64;
-import org.apache.http.HttpHost;
-import org.apache.http.client.methods.CloseableHttpResponse;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClients;
 import org.slf4j.LoggerFactory;
+import org.springframework.web.client.RestClient;
 
 import com.nimbusds.jose.JOSEException;
 import com.nimbusds.jose.crypto.RSASSAVerifier;
@@ -60,14 +54,8 @@ public class JwksLoader extends KeyCache {
     protected List<OidcKey> loadKeys() {
         try {
             // read ISB's keys from signed-jwks endpoint
-            URL url = new URL(jwksProxy);
-            String signedJwksHost = url.getHost();
-            String signedJwksPath = url.getPath();
-            String httpsProtocol = url.getProtocol();
-
-            HttpHost target = new HttpHost(signedJwksHost, 443, httpsProtocol);
-            HttpGet request = new HttpGet(signedJwksPath);
-            String jwksTokenStr = getIsbJwks(target, request);
+            URI signedJwksUri = new URI(jwksProxy);
+            String jwksTokenStr = getIsbJwks(signedJwksUri);
 
             // jwksToken is a signed JSON web token
             SignedJWT jwksToken = SignedJWT.parse(jwksTokenStr);
@@ -86,7 +74,7 @@ public class JwksLoader extends KeyCache {
 
             // Verify ISS and SUB
             if ( !claims.getClaim("iss").toString().equals(claims.getClaim("sub").toString()) ||
-            !claims.getClaim("iss").toString().equals(httpsProtocol + "://" + signedJwksHost)){
+            !claims.getClaim("iss").toString().equals(signedJwksUri.getScheme() + "://" + signedJwksUri.getHost())) {
                 throw new OidcDemoException("Verifying ISS or SUB failed");
             }
             // verify IAT and EXP
@@ -150,24 +138,20 @@ public class JwksLoader extends KeyCache {
             .replaceAll(System.lineSeparator(), "")
             .replace("-----END PUBLIC KEY-----", "");
 
-        byte[] encoded = Base64.decodeBase64(publicKeyPEM);
+        byte[] encoded = Base64.getDecoder().decode(publicKeyPEM);
 
         KeyFactory keyFactory = KeyFactory.getInstance("RSA");
         X509EncodedKeySpec keySpec = new X509EncodedKeySpec(encoded);
         return (RSAPublicKey) keyFactory.generatePublic(keySpec);
     }
 
-    private String getIsbJwks(HttpHost target, HttpGet request) throws IOException {
-        CloseableHttpClient httpclient = HttpClients.createDefault();
-        CloseableHttpResponse response = httpclient.execute(target, request);
+    private String getIsbJwks(URI uri) throws IOException {
+        String jwks = RestClient.create(uri)
+            .get()
+            .retrieve()
+            .body(String.class);
 
-        BufferedReader reader = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
-        String jwksTokenStr = reader.readLine();
-        logger.info("ISB JWKS Token: {}", jwksTokenStr);
-
-        reader.close();
-        response.close();
-        httpclient.close();
-        return jwksTokenStr;
+        logger.info("ISB JWKS Token: {}", jwks);
+        return jwks;
     }
 }
