@@ -7,8 +7,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-import javax.servlet.http.HttpServletRequest;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
@@ -23,7 +21,7 @@ import fi.op.sample.oidc.domain.OidcResponseParameters;
 import fi.op.sample.oidc.domain.idp.IdentityProvider;
 import fi.op.sample.oidc.domain.idp.IdentityProviderList;
 import fi.op.sample.oidc.facade.OidcDemoFacade;
-import net.minidev.json.JSONObject;
+import jakarta.servlet.http.HttpServletRequest;
 
 @Controller
 public class WelcomeController {
@@ -41,13 +39,12 @@ public class WelcomeController {
     }
 
     public void prepareEmbeddedMode(String language, Map<String, Object> model, HttpServletRequest request) {
+        IdentityProviderList idpList = new IdentityProviderListBuilder().build(language);
 
-        IdentityProviderList idpList = new IdentityProviderListBuilder(null).build(language);
+        List<IdentityProvider> idps = idpList.getIdentityProviders();
 
-    	List<IdentityProvider> idps = idpList.getIdentityProviders();
-
-    	if (idpList.getDisturbanceInfo()!=null) {
-        	String dInfo = idpList.getDisturbanceInfo().getAsString("text");
+        if (idpList.getDisturbanceInfo() != null) {
+            String dInfo = idpList.getDisturbanceInfo().get("text").toString();
         	String dInfo2 = dInfo.replace("\n", "<br> <br>"); 					// Make sure that if multiple disturbances they are their own lines
         	idpList.getDisturbanceInfo().put("text", dInfo2);
     		request.getSession().setAttribute("disturbanceinfo", "yes");
@@ -57,7 +54,7 @@ public class WelcomeController {
     	}
 
         model.put("identityProviders", idps);
-        JSONObject disturbanceInfo = idpList.getDisturbanceInfo();
+        Map<String, Object> disturbanceInfo = idpList.getDisturbanceInfo();
         model.put("disturbanceInfo", disturbanceInfo);
         String isbProviderInfo = idpList.getIsbProviderInfo();
         model.put("isbProviderInfo", isbProviderInfo);

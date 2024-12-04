@@ -22,7 +22,7 @@ import fi.op.sample.oidc.domain.idp.IdentityProviderList;
 public class IdentityProviderListBuilderTest {
     @Test
     public void testIdentityProviderListBuilder() {
-        IdentityProviderListBuilder sut = new IdentityProviderListBuilder(null);
+        IdentityProviderListBuilder sut = new IdentityProviderListBuilder();
         IdentityProviderList result = sut.build("en");
         Assert.assertTrue(result.getIdentityProviders().size() > 0);
     }

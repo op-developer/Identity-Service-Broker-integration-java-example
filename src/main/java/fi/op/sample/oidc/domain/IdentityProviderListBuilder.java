@@ -1,16 +1,10 @@
 package fi.op.sample.oidc.domain;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.URL;
+import java.net.URI;
 
-import org.apache.http.HttpHost;
-import org.apache.http.client.methods.CloseableHttpResponse;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClients;
 import org.slf4j.LoggerFactory;
+import org.springframework.web.client.RestClient;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -34,35 +28,26 @@ public class IdentityProviderListBuilder {
     private String idpUrl;
 
     /**
-     * @param url
-     *            The url from which to get identity providers. <br/>
-     *            Can be null. If null, builds url based on configuration.
+     * @param url The url from which to get identity providers.
      */
     public IdentityProviderListBuilder(String url) {
-        if (url == null) {
-            String defaultUrl = Configuration.IDP_LIST_URL;
-            if (!defaultUrl.endsWith("/")) {
-                defaultUrl += "/";
-            }
-            defaultUrl += Configuration.CLIENT_ID;
-            idpUrl = defaultUrl;
-        } else {
-            idpUrl = url;
-        }
+        idpUrl = url;
     }
 
-    private String get(HttpHost target, HttpGet request) throws IOException {
-        CloseableHttpClient httpclient = HttpClients.createDefault();
-        CloseableHttpResponse response = httpclient.execute(target, request);
+    /**
+     * Get identity providers from configured url.
+     */
+    public IdentityProviderListBuilder() {
+        this(getConfiguredUrl());
+    }
 
-        BufferedReader reader = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
-        String jwt = reader.readLine().replaceAll("\\<.*?>", ""); // strip possible html
-        logger.info("Identity provider list: {}", jwt);
-
-        reader.close();
-        response.close();
-        httpclient.close();
-        return jwt;
+    private static String getConfiguredUrl() {
+        String defaultUrl = Configuration.IDP_LIST_URL;
+        if (!defaultUrl.endsWith("/")) {
+            defaultUrl += "/";
+        }
+        defaultUrl += Configuration.CLIENT_ID;
+        return defaultUrl;
     }
 
     /**
@@ -72,17 +57,19 @@ public class IdentityProviderListBuilder {
      */
     public IdentityProviderList build(String language) {
         try {
-            logger.info("Listing identity providers from {}", this.idpUrl);
-            URL url = new URL(this.idpUrl);
-            String idTokenHost = url.getHost();
-            String idTokenPath = url.getPath();
-            String httpsProtocol = url.getProtocol();
+            URI uri = new URI(idpUrl);
 
-            HttpHost target = new HttpHost(idTokenHost, 443, httpsProtocol);
+            logger.info("Listing identity providers from {}", uri);
+            String response = RestClient.create(uri)
+                .get()
+                .uri(uriBuilder -> uriBuilder.queryParam("lang", language).build())
+                .retrieve()
+                .body(String.class);
 
-            HttpGet request = new HttpGet(idTokenPath+"?lang="+language);
+            String json = response.replaceAll("\\<.*?>", ""); // strip possible html
+            logger.info("Identity provider list: {}", json);
 
-            return parse(get(target, request));
+            return parse(json);
         } catch (Exception e) {
             throw new OidcDemoException("Building the list of identity providers failed!", e);
         }

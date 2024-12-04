@@ -1,8 +1,7 @@
 package fi.op.sample.oidc.domain.idp;
 
 import java.util.List;
-
-import net.minidev.json.JSONObject;
+import java.util.Map;
 
 /**
  * A list of identity providers.
@@ -20,7 +19,7 @@ public class IdentityProviderList {
     private String isbConsent;
     private String privacyNoticeLink;
     private String privacyNoticeText;
-    private JSONObject disturbanceInfo;
+    private Map<String, Object> disturbanceInfo;
 
     // "isbProviderInfo":"OP Tunnistuksen välityspalvelun tarjoaa OP Ryhmän osuuspankit ja OP Yrityspankki Oyj.",
     // "isbConsent":"Tunnistautumalla seuraavilla tunnistustavoilla hyväksyt, että palveluntarjoajalle välitetään:
@@ -67,11 +66,11 @@ public class IdentityProviderList {
         return privacyNoticeText;
     }
 
-    public void setDisturbanceInfo(JSONObject disturbanceInfo) {
+    public void setDisturbanceInfo(Map<String, Object> disturbanceInfo) {
         this.disturbanceInfo = disturbanceInfo;
     }
 
-    public JSONObject getDisturbanceInfo() {
+    public Map<String, Object> getDisturbanceInfo() {
         return disturbanceInfo;
     }
 }
