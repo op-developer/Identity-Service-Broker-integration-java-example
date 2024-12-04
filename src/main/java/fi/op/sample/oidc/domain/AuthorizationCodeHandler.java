@@ -11,8 +11,9 @@ import org.springframework.http.MediaType;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestClient;
 
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
+import com.fasterxml.jackson.core.JacksonException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nimbusds.jose.JOSEException;
 import com.nimbusds.jose.JOSEObjectType;
 import com.nimbusds.jose.JWSAlgorithm;
@@ -61,9 +62,9 @@ public class AuthorizationCodeHandler {
         return parseIdToken(response);
     }
 
-    private String parseIdToken(String jsonResponse) {
-        JsonObject jobject = JsonParser.parseString(jsonResponse).getAsJsonObject();
-        return jobject.get("id_token").getAsString();
+    private String parseIdToken(String jsonResponse) throws JacksonException {
+        Map<String, Object> resp = new ObjectMapper().readValue(jsonResponse, new TypeReference<Map<String, Object>>() { });
+        return String.valueOf(resp.get("id_token"));
     }
 
     private String createSignedClientAssertion(OidcRequestParameters params) throws JOSEException {

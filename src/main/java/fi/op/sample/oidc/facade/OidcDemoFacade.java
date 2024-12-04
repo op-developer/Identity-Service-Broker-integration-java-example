@@ -4,25 +4,25 @@ import java.security.PrivateKey;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
 import com.nimbusds.jose.JOSEException;
 import com.nimbusds.jose.JOSEObjectType;
 import com.nimbusds.jose.JWSAlgorithm;
+import com.nimbusds.jose.JWSHeader;
+import com.nimbusds.jose.JWSSigner;
+import com.nimbusds.jose.crypto.RSASSASigner;
 import com.nimbusds.jose.jwk.JWK;
 import com.nimbusds.jose.jwk.JWKSet;
 import com.nimbusds.jose.jwk.KeyUse;
 import com.nimbusds.jose.jwk.RSAKey;
-import com.nimbusds.jose.JWSHeader;
-import com.nimbusds.jose.JWSSigner;
-import com.nimbusds.jose.crypto.RSASSASigner;
 import com.nimbusds.jwt.JWTClaimsSet;
 import com.nimbusds.jwt.SignedJWT;
 
@@ -37,7 +37,6 @@ import fi.op.sample.oidc.domain.OidcDemoException;
 import fi.op.sample.oidc.domain.OidcKey;
 import fi.op.sample.oidc.domain.OidcRequestParameters;
 import fi.op.sample.oidc.domain.OidcResponseParameters;
-import net.minidev.json.JSONValue;
 
 /**
  * OIDC Demo facade implementation.
@@ -222,23 +221,20 @@ public class OidcDemoFacade {
 
         // create Entity Statement JSON web token
 
-        JsonObject openIdRelyingParty = new JsonObject();
-        JsonArray redirectUris = new JsonArray();
-        redirectUris.add(Configuration.REDIRECT_URI);
-        openIdRelyingParty.add("redirect_uris", redirectUris);
-        openIdRelyingParty.addProperty("application_type", "web");
-        openIdRelyingParty.addProperty("id_token_signed_response_alg", "RS256");
-        openIdRelyingParty.addProperty("id_token_encrypted_response_alg", "RSA-OAEP");
-        openIdRelyingParty.addProperty("id_token_encrypted_response_enc", "A128CBC-HS256");
-        openIdRelyingParty.addProperty("request_object_signing_alg", "RS256");
-        openIdRelyingParty.addProperty("token_endpoint_auth_method", "private_key_jwt");
-        openIdRelyingParty.addProperty("token_endpoint_auth_signing_alg", "RS256");
-        openIdRelyingParty.add("client_registration_types", new JsonArray());
-        openIdRelyingParty.addProperty("organization_name", "Saippuakauppias");
-        openIdRelyingParty.addProperty("signed_jwks_uri", Configuration.SP_HOST + "/signed-jwks");
+        Map<String, Object> openIdRelyingParty = new HashMap<>(Map.of(
+            "redirect_uris", List.of(Configuration.REDIRECT_URI),
+            "application_type", "web",
+            "id_token_signed_response_alg", "RS256",
+            "id_token_encrypted_response_alg", "RSA-OAEP",
+            "id_token_encrypted_response_enc", "A128CBC-HS256",
+            "request_object_signing_alg", "RS256",
+            "token_endpoint_auth_method", "private_key_jwt",
+            "token_endpoint_auth_signing_alg", "RS256",
+            "client_registration_types", List.of(),
+            "organization_name", "Saippuakauppias"));
+        openIdRelyingParty.put("signed_jwks_uri", Configuration.SP_HOST + "/signed-jwks");
 
-        JsonObject metadataJsonObject = new JsonObject();
-        metadataJsonObject.add("openid_relying_party", openIdRelyingParty);
+        Map<String, Object> metadataJsonObject = Map.of("openid_relying_party", openIdRelyingParty);
 
         // ten years
         Calendar c = Calendar.getInstance();
@@ -251,7 +247,7 @@ public class OidcDemoFacade {
             .issueTime(new Date())
             .expirationTime(c.getTime())
             .claim("jwks", jwkSet.toJSONObject())
-            .claim("metadata", JSONValue.parse(metadataJsonObject.toString()))
+            .claim("metadata", metadataJsonObject)
             .build();
 
         JWSHeader header = new JWSHeader

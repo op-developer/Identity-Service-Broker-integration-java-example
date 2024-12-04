@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Base64;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import org.slf4j.LoggerFactory;
 import org.springframework.web.client.RestClient;
@@ -25,8 +26,6 @@ import com.nimbusds.jose.jwk.KeyUse;
 import com.nimbusds.jose.jwk.RSAKey;
 import com.nimbusds.jwt.JWTClaimsSet;
 import com.nimbusds.jwt.SignedJWT;
-
-import net.minidev.json.JSONObject;
 
 /**
  * Loads JWKS keys from identity broker and caches them for some minutes.
@@ -89,8 +88,7 @@ public class JwksLoader extends KeyCache {
             logger.info("ISB public keys: {}", claims.getClaim("keys"));
 
             // create JWKSet
-            JSONObject isbKeys = new JSONObject();
-            isbKeys.put("keys", claims.getClaim("keys"));
+            Map<String, Object> isbKeys = Map.of("keys", claims.getClaim("keys"));
             JWKSet jwkSet = JWKSet.parse(isbKeys);
             return pickSignatureKeys(jwkSet);
         } catch (Exception e ) {
