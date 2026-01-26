@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Copyright 2026 OP Pohjola (https://op.fi)
+//
+// SPDX-License-Identifier: MIT
+
 package fi.op.sample.oidc.facade;
 
 import java.security.PrivateKey;
@@ -38,16 +42,6 @@ import fi.op.sample.oidc.domain.OidcKey;
 import fi.op.sample.oidc.domain.OidcRequestParameters;
 import fi.op.sample.oidc.domain.OidcResponseParameters;
 
-/**
- * OIDC Demo facade implementation.
- *
- * <p>
- * Copyright (c) 2019 OP-Palvelut Oy
- * </p>
- *
- * @author OP-Palvelut Oy
- * @license http://www.gnu.org/copyleft/gpl.html GNU General Public License
- */
 public class OidcDemoFacade {
 
     private final Logger logger = LoggerFactory.getLogger(OidcDemoFacade.class);

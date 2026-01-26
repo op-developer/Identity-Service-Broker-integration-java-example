@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Copyright 2026 OP Pohjola (https://op.fi)
+//
+// SPDX-License-Identifier: MIT
+
 package fi.op.sample.oidc.domain;
 
 import java.io.IOException;
@@ -27,17 +31,6 @@ import com.nimbusds.jose.jwk.RSAKey;
 import com.nimbusds.jwt.JWTClaimsSet;
 import com.nimbusds.jwt.SignedJWT;
 
-/**
- * Loads JWKS keys from identity broker and caches them for some minutes.
- *
- * <p>
- * Copyright (c) 2019 OP-Services Ltd.
- * </p>
- *
- * @author OP-Palvelut Oy
- * @license http://www.gnu.org/copyleft/gpl.html GNU General Public License
- * @version 1.0
- */
 public class JwksLoader extends KeyCache {
     private final org.slf4j.Logger logger = LoggerFactory.getLogger(JwksLoader.class);
 

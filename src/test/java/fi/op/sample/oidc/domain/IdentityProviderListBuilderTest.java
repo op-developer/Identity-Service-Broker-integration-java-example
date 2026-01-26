@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Copyright 2026 OP Pohjola (https://op.fi)
+//
+// SPDX-License-Identifier: MIT
+
 package fi.op.sample.oidc.domain;
 
 import java.io.IOException;
@@ -9,16 +13,6 @@ import org.junit.Test;
 import fi.op.sample.oidc.domain.idp.IdentityProvider;
 import fi.op.sample.oidc.domain.idp.IdentityProviderList;
 
-/**
- *
- *
- * <p>
- * Copyright (c) 2019 OP-Services Ltd.
- * </p>
- *
- * @author OP-Palvelut
- * @version 1.0
- */
 public class IdentityProviderListBuilderTest {
     @Test
     public void testIdentityProviderListBuilder() {

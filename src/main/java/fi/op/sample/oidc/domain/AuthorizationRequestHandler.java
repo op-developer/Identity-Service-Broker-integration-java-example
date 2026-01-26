@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Copyright 2026 OP Pohjola (https://op.fi)
+//
+// SPDX-License-Identifier: MIT
+
 package fi.op.sample.oidc.domain;
 
 import java.security.PrivateKey;
@@ -11,17 +15,6 @@ import com.nimbusds.jose.crypto.RSASSASigner;
 import com.nimbusds.jwt.JWTClaimsSet;
 import com.nimbusds.jwt.SignedJWT;
 
-/**
- * Wraps OIDC authorization request parameters into a signed Java Web Token.
- *
- * <p>
- * Copyright (c) 2019 OP-Services Ltd.
- * </p>
- *
- * @author OP-Palvelut Oy
- * @license http://www.gnu.org/copyleft/gpl.html GNU General Public License
- * @version 1.0
- */
 public class AuthorizationRequestHandler {
     // Keystore loader.
     private final KeystoreLoader keyLoader;

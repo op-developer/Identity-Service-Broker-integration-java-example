@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Copyright 2026 OP Pohjola (https://op.fi)
+//
+// SPDX-License-Identifier: MIT
+
 package fi.op.sample.oidc.domain;
 
 import java.io.IOException;
@@ -31,17 +35,6 @@ import com.nimbusds.jose.jwk.RSAKey;
 
 import jakarta.el.PropertyNotFoundException;
 
-/**
- * Loads OIDC keys from keystore.
- *
- * <p>
- * Copyright (c) 2019 OP-Services Ltd.
- * </p>
- *
- * @author OP-Palvelut Oy
- * @license http://www.gnu.org/copyleft/gpl.html GNU General Public License
- * @version 1.0
- */
 public class KeystoreLoader extends KeyCache {
     private final Logger logger = LoggerFactory.getLogger(KeystoreLoader.class);
 
