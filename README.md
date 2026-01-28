@@ -1,3 +1,9 @@
+<!--
+SPDX-FileCopyrightText: Copyright 2026 OP Pohjola (https://op.fi)
+
+SPDX-License-Identifier: MIT
+-->
+
 # Service Provider integration example for the OP Identity Service Broker - Java
 
 This repository provides an easy way to test OP identification

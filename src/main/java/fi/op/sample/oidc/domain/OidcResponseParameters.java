@@ -1,14 +1,13 @@
+// SPDX-FileCopyrightText: Copyright 2026 OP Pohjola (https://op.fi)
+//
+// SPDX-License-Identifier: MIT
+
 package fi.op.sample.oidc.domain;
 
 /**
  * Response after user has completed authentication flow with his or her browser.
  *
- * <p>
- * Copyright (c) 2019 OP-Services Ltd.
- * </p>
- *
  * @author OP-Palvelut Oy
- * @license http://www.gnu.org/copyleft/gpl.html GNU General Public License
  * @version 1.0
  */
 public class OidcResponseParameters {

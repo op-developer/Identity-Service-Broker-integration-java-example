@@ -1,3 +1,7 @@
+// SPDX-FileCopyrightText: Copyright 2026 OP Pohjola (https://op.fi)
+//
+// SPDX-License-Identifier: MIT
+
 package fi.op.sample.oidc.domain;
 
 import java.net.URI;
@@ -26,12 +30,7 @@ import com.nimbusds.jwt.SignedJWT;
 /**
  * Uses OIDC protocol to exchange an authorization code for an ID token.
  *
- * <p>
- * Copyright (c) 2019 OP-Services Ltd.
- * </p>
- *
  * @author OP-Palvelut Oy
- * @license http://www.gnu.org/copyleft/gpl.html GNU General Public License
  * @version 1.0
  */
 public class AuthorizationCodeHandler {
