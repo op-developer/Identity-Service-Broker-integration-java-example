@@ -18,6 +18,16 @@ import com.nimbusds.jwt.EncryptedJWT;
 import com.nimbusds.jwt.JWTClaimsSet;
 import com.nimbusds.jwt.SignedJWT;
 
+/**
+ * Decrypts ID token (using the private key from keystore)
+ *
+ * Verifies ID token signature (using the public key of identity broker)
+ *
+ * Extracts identity from ID token.
+ *
+ * @author OP-Palvelut Oy
+ * @version 1.0
+ */
 public class IdTokenHandler {
     private final org.slf4j.Logger logger = LoggerFactory.getLogger(IdTokenHandler.class);
 

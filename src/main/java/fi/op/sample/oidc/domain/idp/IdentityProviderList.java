@@ -7,6 +7,12 @@ package fi.op.sample.oidc.domain.idp;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * A list of identity providers.
+ *
+ * @author OP-Palvelut Oy (OP Services Ltd)
+ * @version 1.0
+ */
 public class IdentityProviderList {
     private List<IdentityProvider> identityProviders;
     private String isbProviderInfo;

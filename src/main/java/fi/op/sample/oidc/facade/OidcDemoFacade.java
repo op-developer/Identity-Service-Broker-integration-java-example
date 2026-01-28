@@ -42,6 +42,11 @@ import fi.op.sample.oidc.domain.OidcKey;
 import fi.op.sample.oidc.domain.OidcRequestParameters;
 import fi.op.sample.oidc.domain.OidcResponseParameters;
 
+/**
+ * OIDC Demo facade implementation.
+ *
+ * @author OP-Palvelut Oy
+ */
 public class OidcDemoFacade {
 
     private final Logger logger = LoggerFactory.getLogger(OidcDemoFacade.class);

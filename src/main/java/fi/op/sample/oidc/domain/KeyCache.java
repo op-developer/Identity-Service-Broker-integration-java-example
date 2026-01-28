@@ -6,6 +6,12 @@ package fi.op.sample.oidc.domain;
 
 import java.util.List;
 
+/**
+ * Caches loading keys. Keys might be loaded from Java Key Store or from JWKS url.
+ *
+ * @author OP-Palvelut Oy
+ * @version 1.0
+ */
 abstract class KeyCache {
     public static final long DEFAULT_TTL_IN_MILLIS = 5L * 60L * 1000L;
 

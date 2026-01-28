@@ -6,6 +6,12 @@ package fi.op.sample.oidc.domain.idp;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+/**
+ * An identity provider.
+ *
+ * @author OP-Palvelut Oy
+ * @version 1.0
+ */
 public class IdentityProvider {
     private String name;
     private String imageUrl;

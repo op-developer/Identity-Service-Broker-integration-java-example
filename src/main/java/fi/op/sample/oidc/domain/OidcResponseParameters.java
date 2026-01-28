@@ -4,6 +4,12 @@
 
 package fi.op.sample.oidc.domain;
 
+/**
+ * Response after user has completed authentication flow with his or her browser.
+ *
+ * @author OP-Palvelut Oy
+ * @version 1.0
+ */
 public class OidcResponseParameters {
     // Error code.
     private String error;

@@ -4,6 +4,12 @@
 
 package fi.op.sample.oidc.domain;
 
+/**
+ * Exception
+ *
+ * @author OP-Palvelut Oy
+ * @version 1.0
+ */
 public class OidcDemoException extends RuntimeException {
     private static final long serialVersionUID = 1L;
 

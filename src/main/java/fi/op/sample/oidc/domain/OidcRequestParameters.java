@@ -10,6 +10,7 @@ import java.io.Serializable;
  * Transfer object of OIDC settings.
  *
  *
+ * @author OP-Palvelut Oy
  * @version 1.0
  */
 public class OidcRequestParameters implements Serializable {

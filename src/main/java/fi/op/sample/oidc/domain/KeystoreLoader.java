@@ -35,6 +35,12 @@ import com.nimbusds.jose.jwk.RSAKey;
 
 import jakarta.el.PropertyNotFoundException;
 
+/**
+ * Loads OIDC keys from keystore.
+ *
+ * @author OP-Palvelut Oy
+ * @version 1.0
+ */
 public class KeystoreLoader extends KeyCache {
     private final Logger logger = LoggerFactory.getLogger(KeystoreLoader.class);
 

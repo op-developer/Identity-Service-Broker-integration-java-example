@@ -27,6 +27,12 @@ import com.nimbusds.jose.crypto.RSASSASigner;
 import com.nimbusds.jwt.JWTClaimsSet;
 import com.nimbusds.jwt.SignedJWT;
 
+/**
+ * Uses OIDC protocol to exchange an authorization code for an ID token.
+ *
+ * @author OP-Palvelut Oy
+ * @version 1.0
+ */
 public class AuthorizationCodeHandler {
     private final org.slf4j.Logger logger = LoggerFactory.getLogger(AuthorizationCodeHandler.class);
     private final KeystoreLoader keyLoader;

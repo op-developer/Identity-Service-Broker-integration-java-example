@@ -14,6 +14,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import fi.op.sample.oidc.domain.idp.IdentityProviderList;
 
+/**
+ * List of identity providers, which are available for a specific client.
+ *
+ * @author OP-Palvelut Oy
+ * @version 1.0
+ */
 public class IdentityProviderListBuilder {
     private final org.slf4j.Logger logger = LoggerFactory.getLogger(IdentityProviderListBuilder.class);
 

@@ -4,6 +4,12 @@
 
 package fi.op.sample.oidc.domain;
 
+/**
+ * Configuration, except for passwords and secret keys which should be placed in a HSM.
+ *
+ * @author OP-Palvelut Oy
+ * @version 1.0
+ */
 public class Configuration {
     public static final String KEYSTORE_LOCATION = "saippuakauppias.jks";
 

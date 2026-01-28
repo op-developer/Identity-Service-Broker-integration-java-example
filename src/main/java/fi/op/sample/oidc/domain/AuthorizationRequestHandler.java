@@ -15,6 +15,12 @@ import com.nimbusds.jose.crypto.RSASSASigner;
 import com.nimbusds.jwt.JWTClaimsSet;
 import com.nimbusds.jwt.SignedJWT;
 
+/**
+ * Wraps OIDC authorization request parameters into a signed Java Web Token.
+ *
+ * @author OP-Palvelut Oy
+ * @version 1.0
+ */
 public class AuthorizationRequestHandler {
     // Keystore loader.
     private final KeystoreLoader keyLoader;

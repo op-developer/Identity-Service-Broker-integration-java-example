@@ -6,6 +6,12 @@ package fi.op.sample.oidc.domain;
 
 import java.io.Serializable;
 
+/**
+ * User's authenticated identity.
+ *
+ * @author OP-Palvelut Oy
+ * @version 1.0
+ */
 public class Identity implements Serializable {
     private static final long serialVersionUID = 1L;
 

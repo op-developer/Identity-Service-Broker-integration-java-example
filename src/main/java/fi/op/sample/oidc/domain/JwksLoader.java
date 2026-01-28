@@ -31,6 +31,12 @@ import com.nimbusds.jose.jwk.RSAKey;
 import com.nimbusds.jwt.JWTClaimsSet;
 import com.nimbusds.jwt.SignedJWT;
 
+/**
+ * Loads JWKS keys from identity broker and caches them for some minutes.
+ *
+ * @author OP-Palvelut Oy
+ * @version 1.0
+ */
 public class JwksLoader extends KeyCache {
     private final org.slf4j.Logger logger = LoggerFactory.getLogger(JwksLoader.class);
 
