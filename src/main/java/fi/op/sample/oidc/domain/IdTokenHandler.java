@@ -39,7 +39,7 @@ public class IdTokenHandler {
             PrivateKey decryptionKey = keystore.getKeyById(keyId, true).getPrivateKey();
             JWEDecrypter d = new RSADecrypter(decryptionKey);
             e.decrypt(d);
-            logger.info("Decrypted id token: {}", e.getPayload().toString());
+            logger.info("Decrypted id token: {}", e.getPayload());
 
             SignedJWT decrypted = SignedJWT.parse(e.getPayload().toString());
             RSAPublicKey signatureVerificationKey = jwksLoader.getKeyById(decrypted.getHeader().getKeyID(), true)
@@ -48,7 +48,7 @@ public class IdTokenHandler {
             JWTClaimsSet claims = decrypted.getJWTClaimsSet();
 
             String idRawData=decrypted.getPayload().toString();
-            logger.info("Payload: " + idRawData);
+            logger.info("Payload: {}", idRawData);
             idRawData = idRawData.replace(",", ",\n\t");
             idRawData = idRawData.replace("{", "{\n\t");
             idRawData = idRawData.replace("}", "\n}");

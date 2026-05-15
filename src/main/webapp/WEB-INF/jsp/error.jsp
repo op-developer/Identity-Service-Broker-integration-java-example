@@ -9,7 +9,7 @@ SPDX-License-Identifier: MIT
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <html>
 <body>
-<p>Error happened!</p>
+<p>An error occurred!</p>
 <p style="font-weight: bold; color:red;">${error}</p>
 <p><a href="/">Try again</a></p></p>
 </body>

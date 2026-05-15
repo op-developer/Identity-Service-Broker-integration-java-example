@@ -12,6 +12,7 @@ SPDX-License-Identifier: MIT
   <head>
     <meta charset="UTF-8">
     <link href="/resources/css/style.css" type="text/css" rel="stylesheet">
+    <title>Embedded UI Example</title>
   </head>
 
   <body>

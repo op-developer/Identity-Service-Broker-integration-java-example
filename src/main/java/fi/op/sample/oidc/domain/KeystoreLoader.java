@@ -6,7 +6,8 @@ package fi.op.sample.oidc.domain;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.URL;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.security.Key;
 import java.security.KeyFactory;
 import java.security.KeyStore;
@@ -114,7 +115,7 @@ public class KeystoreLoader extends KeyCache {
                     try {
                         stream.close();
                     } catch (IOException e) {
-                        logger.error("Closing keystore stream failed! " + e.getMessage());
+                        logger.error("Closing keystore stream failed! {}", e.getMessage());
                         e.printStackTrace();
                         // nothing to be done
                     }
@@ -126,9 +127,9 @@ public class KeystoreLoader extends KeyCache {
     public RSAPublicKey getVerificationKeyFromJWKS(String jwksProxyUrl) {
         RSAPublicKey publicKey = null;
         try {
-            JWKSet publicKeys = JWKSet.load(new URL(jwksProxyUrl));
+            JWKSet publicKeys = JWKSet.load(new URI(jwksProxyUrl).toURL());
             publicKey = pickSignatureKey(publicKeys);
-        } catch (ParseException | JOSEException | IOException e) {
+        } catch (URISyntaxException | ParseException | JOSEException | IOException e) {
             logger.error("Loading JWKS for OIDC signature verification failed!");
             throw new OidcDemoException("Loading JWKS for OIDC signature verification failed!", e);
         }

@@ -20,7 +20,7 @@ abstract class KeyCache {
 
     private List<OidcKey> keys;
 
-    public KeyCache() {
+    protected KeyCache() {
         this.ttl = DEFAULT_TTL_IN_MILLIS;
     }
 

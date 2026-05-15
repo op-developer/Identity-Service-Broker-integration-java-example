@@ -10,6 +10,7 @@ SPDX-License-Identifier: MIT
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <html lang="en">
   <head>
+    <title>OP Identity Service Broker - Java integration example</title>
     <meta charset="UTF-8">
     <link href="/resources/css/style.css" type="text/css" rel="stylesheet">
   </head>
@@ -65,7 +66,7 @@ SPDX-License-Identifier: MIT
                 </li>
               </ul>
 
-            <h5>User Interaface Language</h5>
+            <h5>User Interface Language</h5>
             <ul class="param-group">
               <li>
                 <input type="radio" name="language" value="fi" id="language_fi" checked>

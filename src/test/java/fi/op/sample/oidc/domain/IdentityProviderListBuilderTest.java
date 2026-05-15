@@ -28,8 +28,8 @@ class IdentityProviderListBuilderTest {
         IdentityProviderList result = IdentityProviderListBuilder.parse(testData);
         List<IdentityProvider> idps = result.getIdentityProviders();
         assertEquals(14, idps.size());
-        assertTrue(idps.get(0).getFtnIdpId().length() > 0);
-        assertTrue(idps.get(0).getImageUrl().length() > 0);
-        assertTrue(idps.get(0).getName().length() > 0);
+        assertTrue(!idps.get(0).getFtnIdpId().isEmpty());
+        assertTrue(!idps.get(0).getImageUrl().isEmpty());
+        assertTrue(!idps.get(0).getName().isEmpty());
     }
 }

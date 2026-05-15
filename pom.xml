@@ -68,7 +68,7 @@ SPDX-License-Identifier: MIT
         <dependency>
             <groupId>com.nimbusds</groupId>
             <artifactId>nimbus-jose-jwt</artifactId>
-            <version>10.8</version>
+            <version>10.9</version>
         </dependency>
 
         <dependency>
