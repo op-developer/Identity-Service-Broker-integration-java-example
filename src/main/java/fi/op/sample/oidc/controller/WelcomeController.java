@@ -4,7 +4,6 @@
 
 package fi.op.sample.oidc.controller;
 
-import java.io.UnsupportedEncodingException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -14,8 +13,8 @@ import java.util.UUID;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import fi.op.sample.oidc.domain.Identity;
@@ -35,7 +34,7 @@ public class WelcomeController {
 
 
     @RequestMapping("/")
-    public String welcome(HttpServletRequest request, Map<String, Object> model) throws UnsupportedEncodingException {
+    public String welcome(HttpServletRequest request, Map<String, Object> model) {
 
     	request.getSession().setAttribute("backurlprefix", "");
 
@@ -71,7 +70,7 @@ public class WelcomeController {
     }
 
     @RequestMapping("/embedded")
-    public String embedded(HttpServletRequest request, Map<String, Object> model) throws UnsupportedEncodingException {
+    public String embedded(HttpServletRequest request, Map<String, Object> model) {
 
     	String language = (String) request.getSession().getAttribute("language");
 
@@ -111,8 +110,6 @@ public class WelcomeController {
             return "embedded";
         }
 
-
-
         boolean prompt = promptParam != null && promptParam.equals("consent");
         OidcRequestParameters params = getFacade().oidcAuthMessage(idp, language, requestId, prompt, purpose);
         logger.info("Request: {}", params.getRequest());
@@ -130,15 +127,15 @@ public class WelcomeController {
         response.setState(request.getParameter("state"));
         response.setCode(request.getParameter("code"));
 
-        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd.MM.YYYY HH:mm:ss");
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss");
         LocalDateTime now = LocalDateTime.now();
         String timenow = dtf.format(now);
 
-        if (response.getError() == null || response.getError().length() == 0) {
+        if (response.getError() == null || response.getError().isEmpty()) {
             Identity identity = getFacade().extractIdentity(response, originalParams);
             model.put ("timenow", timenow);
             model.put("identity", identity);
-            model.put("backurlprefix", request.getSession().getAttribute("backUrlPost"));
+            model.put("backurlprefix", request.getSession().getAttribute("backurlprefix"));
             return "identity";
         }
         else if (response.getError().equals("cancel")) {
@@ -161,13 +158,13 @@ public class WelcomeController {
         }
     }
 
-    @RequestMapping(method = { RequestMethod.GET }, value = "/signed-jwks", produces = "application/jwk-set+jwt; charset=utf-8")
+    @GetMapping(value = "/signed-jwks", produces = "application/jwk-set+jwt; charset=utf-8")
     @ResponseBody
     public String signedJwks() {
         return getFacade().getSignedJwks();
     }
 
-    @RequestMapping(method = { RequestMethod.GET }, value = "/.well-known/openid-federation", produces = "application/entity-statement+jwt; charset=utf-8")
+    @GetMapping(value = "/.well-known/openid-federation", produces = "application/entity-statement+jwt; charset=utf-8")
     @ResponseBody
     public String entityStatement() {
         return getFacade().getEntityStatement();
