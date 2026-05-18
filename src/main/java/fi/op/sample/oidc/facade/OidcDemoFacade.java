@@ -131,8 +131,8 @@ public class OidcDemoFacade {
         signedResponse.setNonce(UUID.randomUUID().toString());
         signedResponse.setState(requestId);
 
-        signedResponse.setNonce(signedResponse.getNonce().replaceAll("-", ""));
-        signedResponse.setState(signedResponse.getState().replaceAll("-", ""));
+        signedResponse.setNonce(signedResponse.getNonce().replace("-", ""));
+        signedResponse.setState(signedResponse.getState().replace("-", ""));
 
         if (doPrompt) {
             signedResponse.setPrompt("consent");
@@ -194,7 +194,7 @@ public class OidcDemoFacade {
         try {
             jwt.sign(signer);
         } catch (JOSEException e) {
-            throw new OidcDemoException("Error signing the JWKS");
+            throw new OidcDemoException("Error signing the JWKS", e);
         }
         return jwt.getHeader().toBase64URL() + "." + jwt.getPayload().toBase64URL() + "."
             + jwt.getSignature().toString();

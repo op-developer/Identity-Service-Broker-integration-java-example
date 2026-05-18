@@ -1,0 +1,19 @@
+<!--/* 
+SPDX-FileCopyrightText: Copyright 2026 OP Pohjola (https://op.fi) 
+
+SPDX-License-Identifier: MIT
+*/-->
+
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8">
+        <link href="/resources/css/style.css" type="text/css" rel="stylesheet">
+        <title>Redirecting to OP Identity Service Broker</title>
+    </head>
+<body onload="document.oidcForm.submit()">
+    <form th:action="${endpointUrl}" method="get" name="oidcForm">
+    <input type="hidden" name="request" th:value="${request}" />
+    </form>
+</body>
+</html>

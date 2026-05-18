@@ -1,15 +1,13 @@
-<%--
-SPDX-FileCopyrightText: Copyright 2026 OP Pohjola (https://op.fi)
+<!--/* 
+SPDX-FileCopyrightText: Copyright 2026 OP Pohjola (https://op.fi) 
 
 SPDX-License-Identifier: MIT
---%>
+*/-->
 
 <!DOCTYPE html>
-<%@ page contentType="text/html; charset=UTF-8" %>
-<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
   <head>
+    <title>OP Identity Service Broker - Java integration example</title>
     <meta charset="UTF-8">
     <link href="/resources/css/style.css" type="text/css" rel="stylesheet">
   </head>
@@ -23,17 +21,17 @@ SPDX-License-Identifier: MIT
         <p>This Demo Service Provider gives you three different examples how to integrate to the Identification Service Broker:</p>
         <ol>
             <li>
-                OP’s hosted identification UI
+                OP's hosted identification UI
             </li>
             <li>
                 <a href="embedded">Self-hosted UI (buttons) embedded into your service</a>
             </li>
         </ol>
-		<h2>OP’s hosted identification UI</h2>
+		<h2>OP's hosted identification UI</h2>
         <div class="row">
             <div class="info">
-                <p>You can place a button or link or some other call-to-action into your UI which redirects the end-user to OP’s hosted identification UI along with the Open ID Connect authentication request.</p>
-                <p>After identifying herself the end-user is redirected back to the return_uri you specify in the authentication request. The consent can be set in the request as well.</p>
+                <p>You can place a button or link or some other call-to-action into your UI which redirects the end-user to OP's hosted identification UI along with the Open ID Connect authentication request.</p>
+                <p>After identifying themself, the end-user is redirected back to the return_uri you specify in the authentication request. The consent can be set in the request as well.</p>
                 <p><a href="https://github.com/op-developer/Identity-Service-Broker-API/blob/master/README.md" target="_blank">See the API docs for more information.</a></p>
             </div>
             <section class="params">
@@ -44,7 +42,7 @@ SPDX-License-Identifier: MIT
                   <label for="promptBox">
                     Require consent
                     <br/>
-                    <small>End-user is forced to review her personal data before returning to service.</small>
+                    <small>End-user is forced to review their personal data before returning to service.</small>
                   </label>
                 </li>
               </ul>
@@ -65,7 +63,7 @@ SPDX-License-Identifier: MIT
                 </li>
               </ul>
 
-            <h5>User Interaface Language</h5>
+            <h5>User Interface Language</h5>
             <ul class="param-group">
               <li>
                 <input type="radio" name="language" value="fi" id="language_fi" checked>

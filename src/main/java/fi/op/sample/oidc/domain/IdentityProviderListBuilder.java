@@ -65,6 +65,9 @@ public class IdentityProviderListBuilder {
                 .retrieve()
                 .body(String.class);
 
+            if (response == null) {
+                throw new OidcDemoException("Identity provider list response is empty");
+            }
             String json = response.replaceAll("\\<.*?>", ""); // strip possible html
             logger.info("Identity provider list: {}", json);
 
